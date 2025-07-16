@@ -1,7 +1,7 @@
 -r requirements.txt
 pytest==4.*
 pytest-flakes==4.*
-pytest-instafail==0.4.*
+pytest-instafail==0.5.*
 pytest-isort==0.3.*
 pytest-pep8==1.0.*
 yapf
