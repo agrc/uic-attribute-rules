@@ -7,8 +7,12 @@ updates:
     groups:
       safe-dependencies:
         update-types: ['minor', 'patch']
+        patterns:
+          - "*"
       major-dependencies:
         update-types: ['major']
+        patterns:
+          - "*"
     commit-message:
       prefix: deps
       prefix-development: deps(dev)
