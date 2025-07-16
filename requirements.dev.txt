@@ -1,5 +1,5 @@
 -r requirements.txt
-pytest==4.*
+pytest==8.*
 pytest-flakes==4.*
 pytest-instafail==0.4.*
 pytest-isort==0.3.*
