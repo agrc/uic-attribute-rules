@@ -5,17 +5,16 @@ rule.py
 A module that acts as the base class for all rules
 """
 
-import os
-
-from arcgisscripting import ExecuteError  # pylint: disable=no-name-in-module
+from pathlib import Path
 
 import arcpy
+from arcgisscripting import ExecuteError  # pylint: disable=no-name-in-module
 
 
 class RuleGroup(object):
     def __init__(self, sde, table, metas):
         self.name = table
-        self.table_path = os.path.join(sde, table)
+        self.table_path = str(Path(sde) / table)
         self.meta_rules = metas
 
     def execute(self):

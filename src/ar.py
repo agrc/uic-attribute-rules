@@ -18,8 +18,8 @@ Options:
     -v --version    Shows the version
 """
 
-import os
 from datetime import datetime
+from pathlib import Path
 
 import arcpy
 from arcgisscripting import ExecuteError  # pylint: disable=no-name-in-module
@@ -65,7 +65,8 @@ def get_rules(sde, rule=None):
         ]
 
         for table in tables:
-            attribute_rules = arcpy.Describe(os.path.join(sde, table)).attributeRules
+            table_path = str(sde / table)
+            attribute_rules = arcpy.Describe(table_path).attributeRules
 
             calculation_rules = ";".join([ar.name for ar in attribute_rules if "Calculation" in ar.type])
             constraint_rules = ";".join([ar.name for ar in attribute_rules if "Constraint" in ar.type])
@@ -74,7 +75,7 @@ def get_rules(sde, rule=None):
                 print("  deleting calculation rules: {}".format(calculation_rules))
                 try:
                     arcpy.management.DeleteAttributeRule(
-                        in_table=os.path.join(sde, table),
+                        in_table=table_path,
                         names=calculation_rules,
                         type="CALCULATION",
                     )
@@ -91,7 +92,7 @@ def get_rules(sde, rule=None):
                 print("  deleting constraint rules {}".format(constraint_rules))
                 try:
                     arcpy.management.DeleteAttributeRule(
-                        in_table=os.path.join(sde, table),
+                        in_table=str(Path(sde) / table),
                         names=constraint_rules,
                         type="CONSTRAINT",
                     )
@@ -158,9 +159,9 @@ def get_rules(sde, rule=None):
 
 def update_version(sde, version):
     with arcpy.da.InsertCursor(
-        in_table=os.path.join(sde, "Version_Information"), field_names=["name", "version", "date"]
+        in_table=str(sde / "Version_Information"), field_names=["name", "version", "date"]
     ) as cursor:
-        date = datetime.datetime.now()
+        date = datetime.now()
         date_string = str(date).split(" ")[0]
         cursor.insertRow(("attribute rules", version, date_string))
 
@@ -172,7 +173,7 @@ def main():
     sde = get_sde_path_for(args["--env"])
     print("acting on {}".format(sde))
 
-    if not arcpy.TestSchemaLock(os.path.join(sde, facility.TABLE)):
+    if not arcpy.TestSchemaLock(str(sde / facility.TABLE)):
         print("Unable to reach the database or acquire the necessary schema lock to add rules")
         exit(0)
 
@@ -185,7 +186,7 @@ def main():
         for rule in get_rules(sde, args["--rule"]):
             rule.delete()
 
-    arcpy.management.ClearWorkspaceCache(sde)
+    arcpy.management.ClearWorkspaceCache(str(sde))
 
 
 if __name__ == "__main__":
