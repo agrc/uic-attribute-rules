@@ -1,15 +1,14 @@
 #!/usr/bin/env python
 # * coding: utf8 *
-'''
+"""
 ruletypes.py
 A module that holds the types of rules
-'''
+"""
 
 from config import config
 
 
 class BaseType(object):
-
     def __init__(self):
         self.type = config.rule_types.calculation
         self.editable = config.editable.yes
@@ -22,7 +21,6 @@ class BaseType(object):
 
 
 class Constant(BaseType):
-
     def __init__(self, name, field, value):
         super(Constant, self).__init__()
 
@@ -32,13 +30,12 @@ class Constant(BaseType):
         self.description = name
         self.editable = config.editable.no
 
-        self.arcade = 'return {};'.format(value)
+        self.arcade = "return {};".format(value)
 
-        self.tag = 'Constant'
+        self.tag = "Constant"
 
 
 class Calculation(BaseType):
-
     def __init__(self, name, field, arcade):
         super(Calculation, self).__init__()
 
@@ -49,11 +46,10 @@ class Calculation(BaseType):
 
         self.arcade = arcade
 
-        self.tag = 'Calculation'
+        self.tag = "Calculation"
 
 
 class Constraint(BaseType):
-
     def __init__(self, name, rule_name, arcade):
         super(Constraint, self).__init__()
 
@@ -66,7 +62,7 @@ class Constraint(BaseType):
 
         self.type = config.rule_types.constraint
 
-        self.tag = 'Constraint'
+        self.tag = "Constraint"
 
-        self.error_message = ' '
+        self.error_message = " "
         self.error_number = 112

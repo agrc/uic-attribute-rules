@@ -41,7 +41,7 @@
 1. install the development requirements
 
     ```sh
-    pip install -r requirements.dev.txt
+    pip install -e .[dev]
     ```
 
 ## Installation

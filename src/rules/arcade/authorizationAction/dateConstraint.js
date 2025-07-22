@@ -1,5 +1,5 @@
 if (!haskey($feature, 'AuthorizationActionDate') || isempty($feature.AuthorizationActionDate)) {
-    return true;
+  return true;
 }
 
 var field = 'StartDate';
@@ -11,11 +11,11 @@ var fk = $feature.authorization_fk;
 var authorizations = filter(set, 'GUID=@fk');
 
 if (isempty(authorizations)) {
-    return true;
+  return true;
 }
 
 var authorization = first(authorizations);
 
 return iif($feature.AuthorizationActionDate < authorization.startdate, {
-    'errorMessage': 'AuthorizationActionDate must be no earlier than the StartDate of the associated Authorization record'
+  'errorMessage': 'AuthorizationActionDate must be no earlier than the StartDate of the associated Authorization record'
 }, true);
