@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # * coding: utf8 *
-'''
+"""
 ar
 
 Usage:
@@ -16,26 +16,38 @@ Options:
     --env=<env>     local, dev, prod
     -h --help       Shows this screen
     -v --version    Shows the version
-'''
+"""
 
 import os
 from datetime import datetime
 
+import arcpy
 from arcgisscripting import ExecuteError  # pylint: disable=no-name-in-module
 from docopt import docopt
 
-import arcpy
 from config.config import get_sde_path_for
 from models.rule import RuleGroup
 from rules import (
-    area_of_review, art_pen, authorization, authorization_action, contact, correction, enforcement, facility, inspection, mit, operating_status, violation, well
+    area_of_review,
+    art_pen,
+    authorization,
+    authorization_action,
+    contact,
+    correction,
+    enforcement,
+    facility,
+    inspection,
+    mit,
+    operating_status,
+    violation,
+    well,
 )
 
-VERSION = '1.2.1'
+VERSION = "1.2.1"
 
 
 def get_rules(sde, rule=None):
-    if rule == 'ALL':
+    if rule == "ALL":
         tables = [
             facility.TABLE,
             well.TABLE,
@@ -55,40 +67,40 @@ def get_rules(sde, rule=None):
         for table in tables:
             attribute_rules = arcpy.Describe(os.path.join(sde, table)).attributeRules
 
-            calculation_rules = ';'.join([ar.name for ar in attribute_rules if 'Calculation' in ar.type])
-            constraint_rules = ';'.join([ar.name for ar in attribute_rules if 'Constraint' in ar.type])
+            calculation_rules = ";".join([ar.name for ar in attribute_rules if "Calculation" in ar.type])
+            constraint_rules = ";".join([ar.name for ar in attribute_rules if "Constraint" in ar.type])
 
             if calculation_rules:
-                print('  deleting calculation rules: {}'.format(calculation_rules))
+                print("  deleting calculation rules: {}".format(calculation_rules))
                 try:
                     arcpy.management.DeleteAttributeRule(
                         in_table=os.path.join(sde, table),
                         names=calculation_rules,
-                        type='CALCULATION',
+                        type="CALCULATION",
                     )
-                    print('    deleted')
+                    print("    deleted")
                 except ExecuteError as e:
-                    message, = e.args
+                    (message,) = e.args
 
-                    if message.startswith('ERROR 002556'):
-                        print('    rule already deleted, skipping...')
+                    if message.startswith("ERROR 002556"):
+                        print("    rule already deleted, skipping...")
                     else:
                         raise e
 
             if constraint_rules:
-                print('  deleting constraint rules {}'.format(constraint_rules))
+                print("  deleting constraint rules {}".format(constraint_rules))
                 try:
                     arcpy.management.DeleteAttributeRule(
                         in_table=os.path.join(sde, table),
                         names=constraint_rules,
-                        type='CONSTRAINT',
+                        type="CONSTRAINT",
                     )
-                    print('    deleted')
+                    print("    deleted")
                 except ExecuteError as e:
-                    message, = e.args
+                    (message,) = e.args
 
-                    if message.startswith('ERROR 002556'):
-                        print('    rule already deleted, skipping...')
+                    if message.startswith("ERROR 002556"):
+                        print("    rule already deleted, skipping...")
                     else:
                         raise e
 
@@ -126,50 +138,55 @@ def get_rules(sde, rule=None):
         ]
 
     rules = {
-        'area_of_review': aor_rules,
-        'art_pen': art_pen_rules,
-        'authorization': authorization_rules,
-        'authorization_action': auth_action_rules,
-        'contact': contact_rules,
-        'correction': correction_rules,
-        'enforcement': enforcement_rules,
-        'facility': facility_rules,
-        'inspection': inspection_rules,
-        'mit': mit_rules,
-        'operating_status': operating_status_rules,
-        'violation': violation_rules,
-        'well': well_rules
+        "area_of_review": aor_rules,
+        "art_pen": art_pen_rules,
+        "authorization": authorization_rules,
+        "authorization_action": auth_action_rules,
+        "contact": contact_rules,
+        "correction": correction_rules,
+        "enforcement": enforcement_rules,
+        "facility": facility_rules,
+        "inspection": inspection_rules,
+        "mit": mit_rules,
+        "operating_status": operating_status_rules,
+        "violation": violation_rules,
+        "well": well_rules,
     }
 
     return [rules[rule]]
 
 
 def update_version(sde, version):
-    with arcpy.da.InsertCursor(in_table=os.path.join(sde, 'Version_Information'), field_names=['name', 'version', 'date']) as cursor:
+    with arcpy.da.InsertCursor(
+        in_table=os.path.join(sde, "Version_Information"), field_names=["name", "version", "date"]
+    ) as cursor:
         date = datetime.datetime.now()
-        date_string = str(date).split(' ')[0]
-        cursor.insertRow(('attribute rules', version, date_string))
+        date_string = str(date).split(" ")[0]
+        cursor.insertRow(("attribute rules", version, date_string))
 
 
-if __name__ == '__main__':
-    '''Main entry point for program. Parse arguments and pass to engine module
-    '''
+def main():
+    """Main entry point for program. Parse arguments and pass to engine module"""
     args = docopt(__doc__, version=VERSION)
 
-    sde = get_sde_path_for(args['--env'])
-    print('acting on {}'.format(sde))
+    sde = get_sde_path_for(args["--env"])
+    print("acting on {}".format(sde))
 
     if not arcpy.TestSchemaLock(os.path.join(sde, facility.TABLE)):
-        print('Unable to reach the database or acquire the necessary schema lock to add rules')
+        print("Unable to reach the database or acquire the necessary schema lock to add rules")
         exit(0)
 
-    if args['update']:
-        for rule in get_rules(sde, args['--rule']):
+    if args["update"]:
+        for rule in get_rules(sde, args["--rule"]):
             rule.execute()
 
         update_version(sde, VERSION)
-    elif args['delete']:
-        for rule in get_rules(sde, args['--rule']):
+    elif args["delete"]:
+        for rule in get_rules(sde, args["--rule"]):
             rule.delete()
 
     arcpy.management.ClearWorkspaceCache(sde)
+
+
+if __name__ == "__main__":
+    main()

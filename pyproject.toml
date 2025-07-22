@@ -1,0 +1,43 @@
+[project]
+name = "uic-attribute-rules"
+version = "1.2.0"
+authors = [{ name = "UGRC Developers", email = 'ugrc-developers@utah.gov' }]
+description = "create and test arcgis pro attribute rules for uic db"
+readme = "readme.md"
+license = { file = "LICENSE" }
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Topic :: Utilities",
+    "Programming Language :: Python",
+    "Programming Language :: Arcade",
+]
+requires-python = ">=3.11"
+dependencies = ["docopt==0.6.2"]
+[project.optional-dependencies]
+dev = [
+    "pytest-cov==6.*",
+    "pytest-instafail==0.5.*",
+    "pytest-mock==3.*",
+    "pytest-watch==4.*",
+    "pytest==8.*",
+    "ruff==0.*",
+]
+[project.scripts]
+ar = "ar:main"
+migrations = "migrations:main"
+[project.urls]
+Repository = "https://github.com/agrc/uic-attribute-rules.git"
+"Bug Tracker" = "https://github.com/agrc/uic-attribute-rules/issues"
+[build-system]
+requires = ["setuptools >= 70.2"]
+[tool.ruff]
+line-length = 120
+[tool.ruff.lint]
+ignore = ["E501"]
+[tool.pytest.ini_options]
+minversion = "6.0"
+testpaths = ["tests", "src"]
+norecursedirs = [".env", "data", "maps", ".github", ".vscode"]
+console_output_style = "count"
+addopts = "--cov-branch --cov=projectname --cov-report term --cov-report xml:cov.xml --instafail"
