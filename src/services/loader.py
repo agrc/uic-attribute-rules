@@ -5,16 +5,15 @@ loader.py
 A module that loads js arcade scripts into text
 """
 
-import os
+from pathlib import Path
 
-ARCADE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "rules", "arcade")
+ARCADE_PATH = Path(__file__).resolve().parent.parent / "rules" / "arcade"
 
 
 def load_rule_for(rule_type, name):
-    rule_location = os.path.join(ARCADE_PATH, rule_type, name + ".js")
+    rule_location = ARCADE_PATH / rule_type / f"{name}.js"
 
-    if not os.path.exists(rule_location):
-        raise Exception("rule file not found: {}".format(rule_location))
+    if not rule_location.exists():
+        raise Exception(f"rule file not found: {rule_location}")
 
-    with open(rule_location) as rule:
-        return rule.read()
+    return rule_location.read_text()

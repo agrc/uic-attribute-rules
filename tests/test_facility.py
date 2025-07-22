@@ -5,16 +5,15 @@ test_facility.py
 A module that tests the facility attribute rules
 """
 
-import os
+from pathlib import Path
 
+import arcpy
 import pytest
 from arcgisscripting import ExecuteError  # pylint: disable=no-name-in-module
 
-import arcpy
-
 table_name = "UICFacility"
-sde = os.path.join(os.path.dirname(__file__), "..", "pro-project", "localhost.sde")
-TABLE = os.path.join(sde, table_name)
+sde = Path(__file__).parent.parent / "pro-project" / "localhost.sde"
+TABLE = str(sde / table_name)
 
 # pragma pylint: disable=no-member
 

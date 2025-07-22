@@ -5,7 +5,7 @@ config.py
 A module that stores common items for attribute rules
 """
 
-import os
+from pathlib import Path
 from types import SimpleNamespace
 
 triggers = SimpleNamespace(
@@ -32,18 +32,18 @@ editable = SimpleNamespace(
 
 
 def get_sde_path_for(env=None):
-    sde = os.path.join(os.path.dirname(__file__), "..", "..", "pro-project")
+    sde = Path(__file__).parent.parent.parent / "pro-project"
 
     if env is None:
-        return os.path.join(sde, "localhost.udeq@uicadmin.sde")
+        return sde / "localhost.udeq@uicadmin.sde"
 
     if env == "local":
-        return os.path.join(sde, "localhost.udeq@uicadmin.sde")
+        return sde / "localhost.udeq@uicadmin.sde"
 
     if env == "dev":
-        return os.path.join(sde, "stage.sde")
+        return sde / "stage.sde"
 
     if env == "prod":
-        return os.path.join(sde, "prod.sde")
+        return sde / "prod.sde"
 
     raise Exception("{} env not found".format(env))
