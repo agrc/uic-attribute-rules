@@ -20,7 +20,12 @@ class RuleGroup(object):
     def execute(self):
         print("creating rules for {}".format(self.name))
         fields = arcpy.ListFields(self.table_path)
-        field_names = [field.name for field in fields if field.name.lower() not in ("createdon", "modifiedon", "editedby") and field.type.lower() not in ("oid", "guid", "globalid")]
+        field_names = [
+            field.name
+            for field in fields
+            if field.name.lower() not in ("createdon", "modifiedon", "editedby")
+            and field.type.lower() not in ("oid", "guid", "globalid")
+        ]
 
         for rule in self.meta_rules:
             print("  creating {} rule".format(rule.rule_name))
@@ -31,7 +36,7 @@ class RuleGroup(object):
                 "name": rule.rule_name,
                 "script_expression": rule.arcade,
                 "triggering_events": rule.triggers,
-                "triggering_fields": ';'.join(field_names),
+                "triggering_fields": ";".join(field_names),
             }
 
             if hasattr(rule, "error_number"):
@@ -59,7 +64,7 @@ class RuleGroup(object):
                     "batch": False,
                     "severity": "",
                     "tags": rule.tag,
-                    "triggering_fields": ';'.join(field_names),
+                    "triggering_fields": ";".join(field_names),
                 }
 
                 if hasattr(rule, "error_number"):
