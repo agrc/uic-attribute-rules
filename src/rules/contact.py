@@ -70,15 +70,14 @@ contact_type_constraint.triggers = [config.triggers.update]
 
 RULES = [
     guid_constant,
-    type_constraint,
-    state_constraint,
-    contact_type_constraint,
-    type_constraint_update,
     name_constraint_update,
+    contact_type_constraint,
+    type_constraint,
+    type_constraint_update,
     organization_constraint_update,
     address_constraint_update,
-    phone_constraint_update,
     city_constraint_update,
-    state_constraint_update,
     state_constraint,
+    state_constraint_update,
+    phone_constraint_update,
 ]
