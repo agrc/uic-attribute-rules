@@ -34,12 +34,12 @@ result_constraint = Constraint("MIT Result and Type", "MITResult", load_rule_for
 result_constraint.triggers = [config.triggers.insert, config.triggers.update]
 
 remediation_constraint = Constraint(
-    "MIT Remediation Action and Result", "RemediationAction", load_rule_for(FOLDER, "remedationConstraint")
+    "MIT Remediation Action and Result", "RemediationAction", load_rule_for(FOLDER, "remediationConstraint")
 )
 remediation_constraint.triggers = [config.triggers.insert, config.triggers.update]
 
 remediation_date_constraint = Constraint(
-    "Remediation Action Date and Remedation Action", "RemActDate", load_rule_for(FOLDER, "remediationDate")
+    "Remediation Action Date and Remediation Action", "RemActDate", load_rule_for(FOLDER, "remediationDate")
 )
 remediation_date_constraint.triggers = [config.triggers.update]
 
