@@ -2,7 +2,7 @@
 # * coding: utf8 *
 """
 well.py
-A module that holds the rules for uicwells
+A module that holds the rules for uic wells
 """
 
 from . import common
@@ -17,7 +17,7 @@ guid_constant = Constant("Well Guid", "GUID", "Guid()")
 
 id_calculation = Calculation("Well Id", "WellId", load_rule_for(FOLDER, "idCalculation"))
 id_calculation.triggers = [config.triggers.insert, config.triggers.update]
-id_calculation.editabe = config.editable.no
+id_calculation.editable = config.editable.no
 
 well_name_constraint = Constraint("Well Name", "WellName", common.constrain_to_required("WellName"))
 well_name_constraint.triggers = [config.triggers.update]
