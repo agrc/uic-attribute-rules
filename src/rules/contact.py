@@ -20,7 +20,7 @@ name_constraint_update = Constraint("Contact Name", "ContactName.update", common
 name_constraint_update.triggers = [config.triggers.update]
 
 phone_constraint_update = Constraint(
-    "Contact phone", "ContacPhone.update", common.constrain_to_required("ContactPhone")
+    "Contact phone", "ContactPhone.update", common.constrain_to_required("ContactPhone")
 )
 phone_constraint_update.triggers = [config.triggers.update]
 
