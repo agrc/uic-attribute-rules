@@ -18,7 +18,7 @@ Options:
     -v --version    Shows the version
 """
 
-from datetime import datetime
+from datetime import datetime as dt
 from pathlib import Path
 
 import arcpy
@@ -43,7 +43,7 @@ from rules import (
     well,
 )
 
-VERSION = "1.2.1"
+VERSION = "2025.07.21"
 
 
 def get_rules(sde, rule=None):
@@ -161,7 +161,7 @@ def update_version(sde, version):
     with arcpy.da.InsertCursor(
         in_table=str(sde / "Version_Information"), field_names=["name", "version", "date"]
     ) as cursor:
-        date = datetime.now()
+        date = dt.now()
         date_string = str(date).split(" ")[0]
         cursor.insertRow(("attribute rules", version, date_string))
 
