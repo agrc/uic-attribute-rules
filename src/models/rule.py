@@ -12,23 +12,26 @@ from arcgisscripting import ExecuteError  # pylint: disable=no-name-in-module
 
 
 class RuleGroup(object):
-    def __init__(self, sde, table, metas):
+    def __init__(self, sde, table, rules):
         self.name = table
         self.table_path = str(Path(sde) / table)
-        self.meta_rules = metas
+        self.meta_rules = rules
 
     def execute(self):
         print("creating rules for {}".format(self.name))
+        fields = arcpy.ListFields(self.table_path)
+        field_names = [field.name for field in fields if field.name.lower() not in ("createdon", "modifiedon", "editedby") and field.type.lower() not in ("oid", "guid", "globalid")]
+
         for rule in self.meta_rules:
             print("  creating {} rule".format(rule.rule_name))
 
             exists = True
-
             args = {
                 "in_table": self.table_path,
                 "name": rule.rule_name,
                 "script_expression": rule.arcade,
                 "triggering_events": rule.triggers,
+                "triggering_fields": ';'.join(field_names),
             }
 
             if hasattr(rule, "error_number"):
@@ -56,6 +59,7 @@ class RuleGroup(object):
                     "batch": False,
                     "severity": "",
                     "tags": rule.tag,
+                    "triggering_fields": ';'.join(field_names),
                 }
 
                 if hasattr(rule, "error_number"):
