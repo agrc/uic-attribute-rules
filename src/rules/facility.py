@@ -18,7 +18,11 @@ guid_constant = Constant("Facility Guid", "GUID", "Guid()")
 
 fips_calculation = Calculation("County Fips", "CountyFIPS", load_rule_for(FOLDER, "fipsCalculation"))
 
-city_calculation = Calculation("Facility City", "FacilityCity", load_rule_for(FOLDER, "cityCalculation"))
+id_calculation = Calculation('Facility Id', 'FacilityID', load_rule_for(FOLDER, 'idCalculation'))
+id_calculation.triggers = [config.triggers.insert, config.triggers.update]
+id_calculation.editable = config.editable.no
+
+city_calculation = Calculation('Facility City', 'FacilityCity', load_rule_for(FOLDER, 'cityCalculation'))
 
 zip_calculation = Calculation("Facility Zip", "FacilityZIP", load_rule_for(FOLDER, "zipCalculation"))
 
@@ -41,6 +45,7 @@ address_constraint_update.triggers = [config.triggers.update]
 RULES = [
     guid_constant,
     fips_calculation,
+    id_calculation,
     city_calculation,
     zip_calculation,
     fips_domain_constraint,
