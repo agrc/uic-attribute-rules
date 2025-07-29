@@ -14,12 +14,12 @@ Options:
     -v --version    Shows the version
 """
 
-from pathlib import Path
-
 import arcpy
 from docopt import docopt
 
 from config.config import get_sde_path_for
+
+VERSION = "2025.07.21"
 
 
 def import_sgid_data(sde):
@@ -45,15 +45,10 @@ def import_sgid_data(sde):
 
 def main():
     """Main entry point for program. Parse arguments and pass to engine module"""
-    args = docopt(__doc__, version="2025.07.21")
+    args = docopt(__doc__, version=VERSION)
 
     sde = get_sde_path_for(args["--env"])
     print("acting on {}".format(sde))
-
-    test_table = str(sde / "Municipalities")
-    if not arcpy.TestSchemaLock(test_table):
-        print("Unable to reach the database or acquire the necessary schema lock to update data", test_table)
-        exit(0)
 
     import_sgid_data(sde)
 
