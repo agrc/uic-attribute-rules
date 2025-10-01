@@ -16,7 +16,7 @@ requires-python = ">=3.11"
 dependencies = ["docopt==0.6.2"]
 [project.optional-dependencies]
 dev = [
-    "pytest-cov==6.*",
+    "pytest-cov==7.*",
     "pytest-instafail==0.5.*",
     "pytest-mock==3.*",
     "pytest-watch==4.*",
